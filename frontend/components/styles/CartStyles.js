@@ -43,5 +43,5 @@ const CartStyles = styled.div`
     overflow: scroll;
   }
 `;
-
+// #003cff BLUE
 export default CartStyles;
