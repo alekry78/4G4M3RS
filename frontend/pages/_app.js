@@ -7,11 +7,23 @@ Router.events.on('routeChangeStart', ()=> NProgress.start());
 Router.events.on('routeChangeComplete', ()=> NProgress.done());
 Router.events.on('routeChangeError', ()=> NProgress.done());
 import '../components/styles/nprogress.css';
-const MyApp = ({Component, pageProps}) =>{
+import {ApolloProvider} from "@apollo/client";
+import withData from "../lib/withData";
+const MyApp = ({Component, pageProps, apollo}) =>{
     return(
-        <Page>
-            <Component {...pageProps}  />
-        </Page>
-    )
+        <ApolloProvider client={apollo}>
+            <Page>
+                <Component {...pageProps}  />
+            </Page>
+        </ApolloProvider>
+)
 }
-export default MyApp
+MyApp.getInitialProps = async function({Component, ctx}){
+    let pageProps = {};
+    if(Component.getInitialProps){
+        pageProps = await Component.getInitialProps(ctx);
+    }
+    pageProps.query = ctx.query;
+    return {pageProps};
+}
+export default withData(MyApp);

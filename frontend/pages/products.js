@@ -1,6 +1,8 @@
+import Products from "../components/Products/Products";
+
 const ProductsPage = () => (
     <div>
-      <p>Hello!</p>
+      <Products />
     </div>
   );
   export default ProductsPage;

@@ -5,6 +5,8 @@ import {User} from "./schemas/User";
 import {createAuth} from "@keystone-next/auth";
 import {statelessSessions, withItemData} from "@keystone-next/keystone/session";
 import {Product} from "./schemas/Products";
+import {ProductImage} from "./schemas/ProductImage";
+import {insertSeedData} from "./seed-data";
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost/keystone-4g4m3rs';
 const sessionConfig = {
     maxAge: 60 * 60 * 24 * 360, // How long should they stay signed in
@@ -30,12 +32,18 @@ export default withAuth(config(
         db:{
             adapter:'mongoose',
             url:databaseURL,
-            //TODO : Add tata seeding here
+            async onConnect(keystone){
+                console.log("Connected to database!");
+                if(process.argv.includes('--seed-data')){
+                    await insertSeedData(keystone);
+                }
+            }
         },
         lists:createSchema({
             // Schema items go in here
             User,
-            Product
+            Product,
+            ProductImage
         }),
         ui:{
             //Show the ui only for people who pass this test
